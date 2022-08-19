@@ -1,5 +1,11 @@
 # Startup Exit Calculator Java
 
+> **Test coverage:**
+> * Class: 100%
+> * Methods: 82%
+> * Lines: 92%
+
+
 ### Instructions to execute
 * Open the folder in IntelliJ
 * In IntelliJ use the latest JDK. I used JDK 17
