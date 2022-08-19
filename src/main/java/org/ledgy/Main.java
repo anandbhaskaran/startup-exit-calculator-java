@@ -2,7 +2,6 @@ package org.ledgy;
 
 import org.ledgy.model.InvestmentRound;
 import org.ledgy.model.Round;
-import org.ledgy.model.Stacking;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,11 +14,7 @@ public class Main {
         InvestmentRound roundB = InvestmentRound.builder().round(Round.SERIES_B).shares(300000).investment(2100000).build();
         InvestmentRound roundC = InvestmentRound.builder().round(Round.SERIES_C).shares(1500000).investment(15000000).build();
 
-        List<InvestmentRound> investmentRounds = new ArrayList<>();
-        investmentRounds.add(commonRound);
-        investmentRounds.add(roundA);
-        investmentRounds.add(roundB);
-        investmentRounds.add(roundC);
+        List<InvestmentRound> investmentRounds = List.of(commonRound,roundA,roundB,roundC);
 
         execute(investmentRounds, 45000000);
     }

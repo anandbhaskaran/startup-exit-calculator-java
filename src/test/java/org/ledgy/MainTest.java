@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.ledgy.model.ExitValuation;
 import org.ledgy.model.InvestmentRound;
 import org.ledgy.model.Round;
-import org.ledgy.model.Stacking;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,11 +27,7 @@ class MainTest {
     @BeforeEach
     void setUp(){
         main = new Main();
-        investmentRounds= new ArrayList<>();
-        investmentRounds.add(commonRound);
-        investmentRounds.add(roundA);
-        investmentRounds.add(roundB);
-        investmentRounds.add(roundC);
+        investmentRounds = List.of(commonRound,roundA,roundB,roundC);
     }
 
     @AfterEach

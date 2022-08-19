@@ -1,5 +1,8 @@
 package org.ledgy.model;
 
+import lombok.Getter;
+
+@Getter
 public enum Round {
     SERIES_C("SERIES_C", LiquidationPreference.builder().participation(Participation.PARTICIPATING_1X).cap(ProfitCap.CAPPED_2X).build(), 1),
     SERIES_B("SERIES B", LiquidationPreference.builder().participation(Participation.PARTICIPATING_1X).cap(ProfitCap.CAPPED_2X).build(), 2),

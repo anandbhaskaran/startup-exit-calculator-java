@@ -31,4 +31,5 @@ public class ExitValuation {
     public String getExitType(){
         return commonShareExitValue>=preferenceExitValue?" (COMMON) ":" (PREFERENCE) ";
     }
+
 }

@@ -1,6 +1,10 @@
-package org.ledgy.model;
+package org.ledgy;
 
 import lombok.Getter;
+import org.ledgy.model.ExitValuation;
+import org.ledgy.model.InvestmentRound;
+import org.ledgy.model.Participation;
+import org.ledgy.model.ProfitCap;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -31,8 +35,8 @@ public class Stacking extends AbstractList<InvestmentRound> {
     public void add(int position, InvestmentRound investmentRound) {
         investmentRounds.add(investmentRound);
         investmentRounds.sort(Comparator.comparingInt(r -> r.getRound().priority));
-        totalInvestment += investmentRound.investment;
-        totalShares += investmentRound.shares;
+        totalInvestment += investmentRound.getInvestment();
+        totalShares += investmentRound.getShares();
     }
 
     @Override
@@ -53,7 +57,7 @@ public class Stacking extends AbstractList<InvestmentRound> {
 
             if(roundExitValuation.prefersPreferenceExit()){
                 // Recompute all the others
-                recomputeStacking(exitValuation - roundExitValuation.preferenceExitValue, List.of(roundToBeComputed));
+                recomputeStacking(exitValuation - roundExitValuation.getPreferenceExitValue(), List.of(roundToBeComputed));
 
                 // If one of the valuation hits the cap, recompute all the others till there are no new caped rounds
                 recomputeOnCap(exitValuation);
@@ -68,7 +72,7 @@ public class Stacking extends AbstractList<InvestmentRound> {
     private void recomputeOnCap(double exitValuation) {
 
         // Get list of rounds that hits the cap and the investor prefers the preferential exit
-        List<InvestmentRound> capedRounds = exitValues.entrySet().stream().filter(entry -> entry.getValue().capHit && entry.getValue().prefersPreferenceExit()).map(Map.Entry::getKey).toList();
+        List<InvestmentRound> capedRounds = exitValues.entrySet().stream().filter(entry -> entry.getValue().isCapHit() && entry.getValue().prefersPreferenceExit()).map(Map.Entry::getKey).toList();
         boolean hasNewCapedRounds = !capedRounds.isEmpty();
 
         // Recompute till there is no change in cap hit
@@ -78,7 +82,7 @@ public class Stacking extends AbstractList<InvestmentRound> {
             double newExitValuation = exitValuation - capedRounds.stream().mapToDouble(ir -> exitValues.get(ir).getExitValue()).sum();
             recomputeStacking(newExitValuation,  capedRounds);
 
-            hasNewCapedRounds = exitValues.entrySet().stream().filter(entry -> entry.getValue().capHit && entry.getValue().prefersPreferenceExit()).map(Map.Entry::getKey).toList().size() > capedRounds.size();
+            hasNewCapedRounds = exitValues.entrySet().stream().filter(entry -> entry.getValue().isCapHit() && entry.getValue().prefersPreferenceExit()).map(Map.Entry::getKey).toList().size() > capedRounds.size();
         }
     }
 
@@ -89,10 +93,10 @@ public class Stacking extends AbstractList<InvestmentRound> {
         // Preference Exit Valuation
         double preferenceExitValuation = 0;
         boolean capHit = false;
-        if(roundToBeComputed.getRound().liquidationPreference.participation == Participation.PARTICIPATING_1X) {
-            double liquidityExitPreferenceValue = Math.min(exitValuation, roundToBeComputed.investment);
+        if(roundToBeComputed.getRound().liquidationPreference.getParticipation() == Participation.PARTICIPATING_1X) {
+            double liquidityExitPreferenceValue = Math.min(exitValuation, roundToBeComputed.getInvestment());
             double liquidityExitProfitValue = Math.max(0, (exitValuation - getPreferenceTotalInvestment(computedExitValues)) * ownership.get(roundToBeComputed));
-            if(roundToBeComputed.getRound().liquidationPreference.cap == ProfitCap.CAPPED_2X){
+            if(roundToBeComputed.getRound().liquidationPreference.getCap() == ProfitCap.CAPPED_2X){
                 preferenceExitValuation = Math.min(2* roundToBeComputed.getInvestment(), liquidityExitPreferenceValue +liquidityExitProfitValue);
                 if(preferenceExitValuation == 2* roundToBeComputed.getInvestment()){
                     capHit = true;
@@ -120,12 +124,12 @@ public class Stacking extends AbstractList<InvestmentRound> {
     }
 
     // If we know that the low priority stakeholder will pick up the common stocks,
-    // eleminate the preference money that needs to be given to lower priority stakeholders
+    // eliminate the preference money that needs to be given to lower priority stakeholders
     private double getPreferenceTotalInvestment(HashMap<InvestmentRound, ExitValuation> computedExitValues) {
         double preferenceTotalInvestment = totalInvestment;
         for(InvestmentRound roundToBeComputed: investmentRounds){
             if(computedExitValues.get(roundToBeComputed) != null && !computedExitValues.get(roundToBeComputed).prefersPreferenceExit()){
-                preferenceTotalInvestment -= roundToBeComputed.investment;
+                preferenceTotalInvestment -= roundToBeComputed.getInvestment();
             }
         }
         return preferenceTotalInvestment;
