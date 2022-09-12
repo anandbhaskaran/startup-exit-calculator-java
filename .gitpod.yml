@@ -4,5 +4,6 @@
 
 tasks:
   - init: ./gradlew build
-
+image:
+  file: .gitpod.Dockerfile
 
