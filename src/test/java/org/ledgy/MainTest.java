@@ -118,4 +118,27 @@ class MainTest {
         assertEquals(7000000, exitValues.get(roundB).getExitValueWithTwoDecimal() );
         assertEquals(35000000, exitValues.get(roundC).getExitValueWithTwoDecimal() );
     }
+
+    @Test
+    void executeStage8() {
+        System.out.println("Exit valuation : " + 39000000);
+        stacking = Main.execute(investmentRounds, 39000000);
+        HashMap<InvestmentRound, ExitValuation> exitValues = stacking.getExitValues();
+    }
+
+    @Test
+    void executeStage9() {
+        System.out.println("Exit valuation : " + 44000000);
+        stacking = Main.execute(investmentRounds, 44000000);
+        HashMap<InvestmentRound, ExitValuation> exitValues = stacking.getExitValues();
+
+    }
+
+    @Test
+    void executeStage10() {
+        System.out.println("Exit valuation : " + 47000000);
+        stacking = Main.execute(investmentRounds, 47000000);
+        HashMap<InvestmentRound, ExitValuation> exitValues = stacking.getExitValues();
+
+    }
 }
