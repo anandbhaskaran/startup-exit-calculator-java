@@ -9,7 +9,12 @@
 ### Instructions to execute
 * Open the folder in IntelliJ
 * In IntelliJ use the latest JDK. I used JDK 17
-* Execute /src/main/java/org/ledgy/MainTest
+* Execute /src/main/java/org/ledgy/Main
+
+#### Quick Execution
+* Navigate to [Gitpod workspace](https://anandbhaska-startupexit-qo6tsdrop06.ws-us64.gitpod.io/)
+* Install the recommended extensions
+* Execute any test/ code from your browser and you will see the result in the console
 
 We will have the following output:
 ```
