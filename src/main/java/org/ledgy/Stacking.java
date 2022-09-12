@@ -77,6 +77,8 @@ public class Stacking extends AbstractList<InvestmentRound> {
 
         // Recompute till there is no change in cap hit
         while (hasNewCapedRounds){
+            capedRounds = exitValues.entrySet().stream().filter(entry -> entry.getValue().isCapHit() && entry.getValue().prefersPreferenceExit()).map(Map.Entry::getKey).toList();
+
             System.out.println("Hit cap: " + capedRounds.stream().map(ir->ir.getRound().name).collect(Collectors.joining(", ")));
 
             double newExitValuation = exitValuation - capedRounds.stream().mapToDouble(ir -> exitValues.get(ir).getExitValue()).sum();
